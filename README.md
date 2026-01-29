@@ -3,7 +3,8 @@ This is a slimmed down version of [EspMeshCompact](https://github.com/htotoo/Esp
 It is very experimental and should be used with caution.
 
 ## Example Usage
-Running on a [Raspberry Pi Pico 1](https://www.raspberrypi.com/products/raspberry-pi-pico/) with a [Waveshare Core1262](https://www.amazon.com/dp/B09LV2W64R)
+Running on a [Raspberry Pi Pico 1](https://www.raspberrypi.com/products/raspberry-pi-pico/) with a [Waveshare Core1262](https://www.amazon.com/dp/B09LV2W64R)  
+
 Requires these libraries:
 * jgromes/RadioLib
 * rweather/Crypto
