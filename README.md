@@ -3,13 +3,30 @@ This is a slimmed down version of [EspMeshCompact](https://github.com/htotoo/Esp
 It is very experimental and should be used with caution.
 
 ## Example Usage
+### Environment
 Running on a [Raspberry Pi Pico 1](https://www.raspberrypi.com/products/raspberry-pi-pico/) with a [Waveshare Core1262](https://www.amazon.com/dp/B09LV2W64R)  
 
 Requires these libraries:
 * jgromes/RadioLib
 * rweather/Crypto
-* densaugeo/base64
+* densaugeo/base64  
+  
+Built for arduino or earlephilhower's pico-arduino-sdk.  
+`platformio.ini`:
+```ini
+[env:pico]
+platform = raspberrypi
+board = pico
+framework = arduino
+board_build.core = earlephilhower
+monitor_speed = 115200
+lib_deps = 
+	jgromes/RadioLib@^7.5.0
+	rweather/Crypto@^0.4.0
+	densaugeo/base64@^1.4.0
+```
 
+### Code Example
 ```cpp
 #include <Arduino.h>
 #include <MTSimpleBroadcast.hpp>
@@ -42,7 +59,6 @@ MTSimpleBroadcast mtsb;
 
 void setup() {
 
-
     // Set up SPI
     SPI1.setSCK(PIN_SCK);
     SPI1.setTX(PIN_MOSI);
@@ -69,13 +85,28 @@ void setup() {
     // Broadcast Node Info
     mtsb.broadcastMyNodeInfo(channel);
     delay(500);
-    
+
     // Broadcast Text Message
     std::string test_msg = "Hello World!";
     mtsb.broadcastTextMessage(test_msg, channel);
 }
 
-void loop() {
-    // put your main code here, to run repeatedly:
-}
+void loop() { }
 ```
+
+### Wiring
+Waveshare Core1262 <-> Raspberry Pi Pico 1
+
+Core1262 Pin      | Pico Pin
+------------------|----------------
+VCC               | 3V3(OUT)
+GND               | GND
+MISO              | GPIO12
+MOSI              | GPIO11
+SCK               | GPIO10
+CS                | GPIO4
+DIO1 (IRQ)        | GPIO20
+RESET             | GPIO3
+BUSY              | GPIO2
+
+![Wiring](res/example_diagram.jpg)
