@@ -42,42 +42,37 @@ MTSimpleBroadcast mtsb;
 
 void setup() {
 
-    Serial.begin(115200);
-    while (!Serial) { }
-    Serial.println("Serial Active");
 
-    Serial.println("Initializing SPI...");
+    // Set up SPI
     SPI1.setSCK(PIN_SCK);
     SPI1.setTX(PIN_MOSI);
     SPI1.setRX(PIN_MISO);
     SPI1.begin();
 
-    // Make sure that this pin is unconnected and floating
+    // Initialize Random with a floating pin
     randomSeed(analogRead(A0));
 
-    Serial.println("Starting radio...");
+    // Initialize Radio
     mtsb.RadioInit(SPI1, PIN_CS, PIN_IRQ, PIN_RST, PIN_BUSY, lora_config_mt);
-    Serial.println("Radio started.");
-
-    Serial.println("Configuring radio...");
     mtsb.setSendHopLimit(2);
 
+    // Configure Node Info
     uint32_t node_id = 0xABBABAAB;
     std::string short_name = "rppt";
     std::string long_name = "pi_pico_test";
     uint8_t hardware_model = 44;
-
     MTHelpers::NodeInfoBuilder(mtsb.getMyNodeInfo(), node_id, short_name, long_name, hardware_model);
-    Serial.println("Radio configured.");
 
+    // Define Channel
     MTSB_ChannelEntry channel("MediumFast", "AQ==");
 
-    Serial.println("Sending test message...");
-    std::string test_msg = "Hello World!";
+    // Broadcast Node Info
     mtsb.broadcastMyNodeInfo(channel);
     delay(500);
+    
+    // Broadcast Text Message
+    std::string test_msg = "Hello World!";
     mtsb.broadcastTextMessage(test_msg, channel);
-    Serial.println("Test message sent.");
 }
 
 void loop() {
